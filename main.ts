@@ -27,13 +27,17 @@ export default class WordCountPlugin extends Plugin {
   async onload() {
     await this.loadSettings();
     await this.processFiles();
-    this.registerEvent(
-      this.app.vault.on("modify", (file: TFile) => {
-        if (file.extension === "md") {
-          this.processFiles();
-        }
-      })
-    );
+
+    const processIfMarkdown = (file: TFile) => {
+      if (file.extension === "md") {
+        this.processFiles();
+      }
+    };
+
+    this.registerEvent(this.app.vault.on("create", processIfMarkdown));
+    this.registerEvent(this.app.vault.on("modify", processIfMarkdown));
+    this.registerEvent(this.app.vault.on("delete", processIfMarkdown));
+    this.registerEvent(this.app.vault.on("rename", processIfMarkdown));
   }
 
   async loadSettings() {
