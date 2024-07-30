@@ -67,6 +67,8 @@ export default class WordCountPlugin extends Plugin {
     }
 
     const files = this.app.vault.getFiles();
+    if (files.length === 0) return;
+
     const newFiles = await this.categorizeFiles(files, isSameDay);
 
     this.updateSettings(newFiles, isSameDay);
