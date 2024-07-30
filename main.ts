@@ -34,7 +34,6 @@ export default class WordCountPlugin extends Plugin {
       }
     };
 
-    this.registerEvent(this.app.vault.on("create", processIfMarkdown));
     this.registerEvent(this.app.vault.on("modify", processIfMarkdown));
     this.registerEvent(this.app.vault.on("delete", processIfMarkdown));
     this.registerEvent(this.app.vault.on("rename", processIfMarkdown));
