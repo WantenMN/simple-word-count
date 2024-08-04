@@ -62,15 +62,15 @@ export default class WordCountPlugin extends Plugin {
   }
 
   async processFiles() {
+    const files = this.app.vault.getFiles();
+    if (files.length === 0) return;
+
     const now = Date.now();
     const isSameDay = this.isSameDay(now, this.settings.initTime);
 
     if (!isSameDay) {
       this.settings.initTime = now;
     }
-
-    const files = this.app.vault.getFiles();
-    if (files.length === 0) return;
 
     const newFiles = await this.categorizeFiles(files, isSameDay);
 
@@ -132,11 +132,12 @@ export default class WordCountPlugin extends Plugin {
 
   updateSettings(newFiles: FileStatus[], isSameDay: boolean) {
     this.settings.files = newFiles;
-    this.settings.count = this.calculateTotalCount(newFiles);
 
     if (!isSameDay) {
       this.settings.initCount = this.settings.count;
     }
+
+    this.settings.count = this.calculateTotalCount(newFiles);
   }
 
   calculateTotalCount(files: FileStatus[]): number {
